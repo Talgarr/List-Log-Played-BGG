@@ -6,7 +6,7 @@ from tabulate import tabulate
 
 
 def get_collection(username):
-    url = 'https://boardgamegeek.com/xmlapi2/collection?username=' + username + '&own=1'
+    url = 'https://boardgamegeek.com/xmlapi2/collection?username=' + username + '&own=1&excludesubtype=boardgameexpansion'
     response = requests.get(url)
     while b'Your request for this collection has been accepted and will be processed.  Please try again later for access.' in response.content:
         sleep(3)
@@ -43,4 +43,7 @@ for name in ['Talgarr', 'fredl751']:
 plays = sorted(plays.items(), key=lambda x: x[1], reverse=True)
 for i in range(len(plays)):
     plays[i] = [plays[i][0], plays[i][1].strftime("%d %b %Y")]
+for game in owns:
+    if game not in plays:
+        plays.append([game, 0])
 print(tabulate(plays, headers=['Game', 'Last Played']))
